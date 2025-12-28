@@ -148,7 +148,88 @@ When an API is slow only in production, I compare data volume and dependencies f
 
 ---
 
-4. You changed `application.properties` but changes are not reflecting. Why?
+## You changed `application.properties` but changes are not reflecting. Why?
+
+## One-Line Explanation
+
+Spring Boot configuration changes may not reflect due to restart or refresh issues, active profile mismatch, external configuration overrides, caching, or incorrect property resolution.
+
+---
+
+## Common Root Causes & Debugging Checklist
+
+### 1. Application Restart or Refresh Not Triggered
+- `application.properties` is loaded only at application startup by default.
+- A restart is required for changes to take effect.
+- If Spring Boot Actuator is enabled, configuration can be refreshed using `/actuator/refresh`.
+- If Spring Boot Admin is configured, configuration refresh can be triggered centrally.
+
+---
+
+### 2. Active Profile Mismatch
+- If a profile such as `dev`, `qa`, or `prod` is active, Spring loads `application-{profile}.properties`.
+- Changes in `application.properties` will be ignored if overridden by a profile-specific file.
+
+---
+
+### 3. Spring Cloud Config Server Overrides Local Configuration
+- When Spring Cloud Config Server is enabled, it becomes the primary source of configuration.
+- Local configuration files are ignored.
+- Changes must be updated in the config repository and refreshed using Actuator.
+
+---
+
+### 4. Typo or Incorrect Property Key
+- Spring silently ignores unknown or misspelled property keys.
+- Common causes include wrong property prefixes and incorrect YAML indentation.
+
+---
+
+### 5. Environment Variables or JVM Arguments Override File Configuration
+- Spring Boot follows a strict property precedence order.
+- JVM arguments and environment variables override values in `application.properties`.
+- If a property is passed using `-Dproperty=value` or as an environment variable, file changes will not apply.
+
+---
+
+### 6. Configuration Cached at Startup (Non-Refreshable Beans)
+- `@Value` and `@ConfigurationProperties` are bound during application startup.
+- Without `@RefreshScope`, refreshed configuration values will not update beans at runtime.
+
+---
+
+### 7. Multiple Configuration Locations
+- Spring may load configuration from multiple locations such as `classpath:/config/` or external paths.
+- The application might be reading a different configuration file than the one being edited.
+
+---
+
+## Recommended Production Debugging Order
+
+1. Confirm application restart or refresh was performed  
+2. Verify active Spring profile  
+3. Check Spring Cloud Config or other external configuration sources  
+4. Validate environment variable and JVM overrides  
+5. Verify property key correctness  
+6. Check refresh scope usage  
+7. Confirm correct configuration file location  
+
+---
+
+## Interview-Ready Summary
+
+When configuration changes do not reflect, first verify restart or refresh, then check active profiles and external configuration sources like Spring Cloud Config. Also validate environment variable overrides, refresh scope usage, property keys, and configuration file locations.
+
+---
+
+## License
+
+MIT
+
+
+
+
+
 5. Your Spring Boot service crashes under high traffic. What could be the reasons?
 6. Multiple beans of the same type exist and Spring throws an error. How do you fix it?
 7. You need different configs for dev, test, and prod. How will you design this?
