@@ -229,8 +229,95 @@ MIT
 
 
 
+## Your Spring Boot service crashes under high traffic. What could be the reasons?
 
-5. Your Spring Boot service crashes under high traffic. What could be the reasons?
+## One-Line Explanation
+
+A Spring Boot service can crash under high traffic due to insufficient resources, memory leaks, thread or connection pool exhaustion, unbounded caching, GC pressure, lack of auto-scaling, or failures in downstream dependencies.
+
+---
+
+## Root Causes & Debugging Checklist
+
+### 1. Insufficient CPU and Memory Resources
+- The JVM may run out of heap memory or face CPU starvation under load.
+- Incorrect container or VM resource limits can cause frequent crashes or restarts.
+
+---
+
+### 2. Memory Leaks in the Application
+- Objects retained unintentionally due to static references, listeners, or unbounded collections.
+- Leads to gradual heap exhaustion and `OutOfMemoryError`.
+
+---
+
+### 3. Improper Caching Strategy
+- Unbounded caches or missing eviction policies increase memory usage.
+- Cache entries must have size limits and TTLs.
+
+---
+
+### 4. Inadequate Load Testing and Capacity Planning
+- Absence of production-like load testing hides scalability issues.
+- Incorrect capacity planning results in undersized infrastructure.
+
+---
+
+### 5. Auto-Scaling Not Enabled or Misconfigured
+- Without proper horizontal or vertical scaling, traffic spikes overwhelm the service.
+- Delayed or incorrect scaling thresholds worsen outages.
+
+---
+
+### 6. Downstream Dependency Failures
+- Slow or failing downstream APIs block request threads.
+- Missing timeouts, circuit breakers, or bulkheads cause cascading failures.
+
+---
+
+### 7. Thread Pool Exhaustion
+- Limited servlet, executor, or async thread pools get exhausted under load.
+- Blocked threads lead to request pile-up and service crash.
+
+---
+
+### 8. Database or Connection Pool Exhaustion
+- Insufficient database or HTTP connection pool size causes threads to wait indefinitely.
+- Results in request timeouts and service instability.
+
+---
+
+### 9. Excessive Garbage Collection Pressure
+- High object creation rate leads to frequent Full GCs.
+- Causes long pause times and eventual JVM or container termination.
+
+---
+
+### 10. Blocking I/O in Request Threads
+- Blocking REST, database, or file I/O reduces throughput.
+- Under heavy load, this leads to thread starvation.
+
+---
+
+## Recommended Production Debugging Order
+
+1. Verify CPU and memory limits  
+2. Check for memory leaks and GC behavior  
+3. Inspect thread pools and connection pools  
+4. Validate caching configuration and eviction policies  
+5. Review downstream dependencies and resilience patterns  
+6. Confirm load testing and capacity planning  
+7. Validate auto-scaling configuration  
+
+---
+
+## Interview-Ready Summary
+
+When a Spring Boot service crashes under high traffic, the root causes typically include resource exhaustion, memory leaks, unbounded caches, thread or connection pool exhaustion, GC pressure, missing auto-scaling, and unprotected downstream dependencies.
+
+---
+
+
 6. Multiple beans of the same type exist and Spring throws an error. How do you fix it?
 7. You need different configs for dev, test, and prod. How will you design this?
 8. Your API works fine but returns 401 randomly. What could cause this?
