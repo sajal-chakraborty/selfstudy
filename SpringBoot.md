@@ -1,26 +1,10 @@
-# Spring Boot Interview Questions (Scenario + Internals)
+# Spring Boot Interview Questions
 
-A curated collection of **real-world Spring Boot interview questions**, focusing on  
-👉 production issues  
-👉 debugging mindset  
-👉 performance & scalability  
-👉 Spring Boot internals  
-
-> Interviewers don’t test annotations.  
-> They test **how you think when things break in production**.
+## (1) Your Spring Boot app works locally but fails after deployment. What are the first 3 things you check?
 
 ---
 
-## 🔥 Scenario-Based Questions (Real Interview Style)
-
-## Spring Boot Interview Question – Deployment Failure Debugging
-
-## ❓ Question
-**Your Spring Boot app works locally but fails after deployment. What are the first 3 things you check?**
-
----
-
-## ✅ High-Level Answer (What You Say First in Interview)
+## ✅ High-Level Answer
 
 1. **Application startup logs** to identify configuration, bean, or dependency failures.
 2. **Active Spring profile and environment-specific configuration** to ensure required properties are correctly set.
@@ -28,7 +12,7 @@ A curated collection of **real-world Spring Boot interview questions**, focusing
 
 ---
 
-## 🔍 Detailed Breakdown (What You Explain If Asked)
+## 🔍 Detailed Breakdown
 
 ### 1️⃣ Application Startup Logs (First Priority)
 
