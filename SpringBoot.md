@@ -1,5 +1,176 @@
 # Spring Boot Interview Questions
 
+# Spring Boot – Core Interview Questions & Answers (Deep Dive)
+
+This document covers **commonly asked Spring Boot interview questions** with **clear explanations and real-world reasoning**.  
+Use this as a **quick revision + conceptual clarity guide**.
+
+---
+
+## 1. Can `@Transactional` work on private methods? Why / why not?
+
+**No, `@Transactional` does not work on private methods.**
+
+### Why?
+Spring applies `@Transactional` using **AOP proxies**. Proxies can intercept only:
+- public (and sometimes protected/package-private) methods
+- methods invoked through the Spring-managed proxy
+
+Private methods:
+- cannot be overridden
+- are invoked internally within the same class
+- bypass the proxy mechanism
+
+### Key takeaway
+> `@Transactional` works only when the method call goes **through the Spring proxy**, which private methods do not.
+
+---
+
+## 2. What happens if an exception is thrown inside a `@Transactional` method but caught?
+
+**Rollback will NOT happen if the exception is caught and not rethrown.**
+
+### Why?
+Spring marks a transaction for rollback only when:
+- an exception escapes the transactional method
+- and it matches rollback rules (`RuntimeException` by default)
+
+If you catch the exception:
+- Spring assumes successful execution
+- the transaction commits
+
+### How to force rollback
+- Rethrow the exception
+- Use `rollbackFor = Exception.class`
+- Call `TransactionAspectSupport.currentTransactionStatus().setRollbackOnly()`
+
+---
+
+## 3. Difference between `@ComponentScan` and `spring.factories` auto-configuration
+
+### `@ComponentScan`
+- Scans packages for annotated components (`@Component`, `@Service`, etc.)
+- Explicit and package-based
+- Controlled by application developers
+
+### `spring.factories` Auto-configuration
+- Used internally by Spring Boot
+- Loads configuration classes conditionally
+- Based on classpath, environment, and missing beans
+- Uses annotations like `@ConditionalOnClass`, `@ConditionalOnMissingBean`
+
+### Core difference
+> `@ComponentScan` is **developer-driven discovery**,  
+> auto-configuration is **framework-driven conditional setup**.
+
+---
+
+## 4. Why does `@Autowired` sometimes fail even when a bean exists?
+
+Common reasons:
+- Multiple beans of the same type (ambiguity)
+- Bean exists in a different ApplicationContext
+- Conditional bean not created (condition not met)
+- Profile mismatch
+- Incorrect or missing `@Qualifier`
+- Circular dependency (especially with constructor injection)
+- Bean initialization order issues
+
+### Key idea
+> Bean existence alone is not enough — **uniqueness, visibility, and lifecycle** matter.
+
+---
+
+## 5. How does Spring Boot decide which `DataSource` to auto-configure?
+
+Spring Boot follows a **priority-based decision model**:
+
+1. User-defined `DataSource` bean (highest priority)
+2. Explicit configuration in `application.yml/properties`
+3. Embedded databases (H2, HSQL, Derby) if present
+4. External DB drivers (MySQL, PostgreSQL, etc.)
+
+If multiple drivers exist without clear configuration:
+- Spring Boot may fail due to ambiguity
+- Or choose an embedded DB if available
+
+### Rule
+> Auto-configuration happens only when Spring Boot can make a **safe, unambiguous choice**.
+
+---
+
+## 6. Can we change the default embedded server (Tomcat) at runtime? Why not?
+
+**No, the embedded server cannot be changed at runtime.**
+
+### Why?
+- The server is initialized during application startup
+- It manages:
+  - ports
+  - thread pools
+  - servlet lifecycle
+- Changing it would require restarting the ApplicationContext
+
+You can:
+- switch servers at build or startup time
+- not dynamically at runtime
+
+---
+
+## 7. What is the real difference between `@Configuration` and `@Component`?
+
+Both register beans, but their behavior differs.
+
+### `@Configuration`
+- Uses CGLIB proxying
+- Ensures `@Bean` methods return singleton instances
+- Enforces full configuration semantics
+
+### `@Component`
+- Registers a simple bean
+- `@Bean` methods behave like normal methods
+- No proxy enforcement
+
+### Key difference
+> `@Configuration` guarantees **consistent singleton behavior**,  
+> `@Component` does not.
+
+---
+
+## 8. Why is constructor injection preferred over field injection?
+
+Constructor injection is preferred because it:
+- Ensures mandatory dependencies are provided
+- Makes objects immutable
+- Improves testability
+- Avoids partially initialized beans
+- Detects circular dependencies early
+
+Field injection:
+- Uses reflection
+- Hides dependencies
+- Makes testing harder
+- Can cause runtime surprises
+
+### Spring’s internal preference
+> Constructor injection is safer, clearer, and more maintainable.
+
+---
+
+## Final Interview Summary
+
+These questions test:
+- Spring internals
+- Proxy behavior
+- Lifecycle management
+- Design principles
+
+Understanding the **why** behind each answer is what separates  
+**framework users** from **framework engineers**.
+
+---
+
+
 ## (1) Your Spring Boot app works locally but fails after deployment. What are the first 3 things you check?
 
 ---
