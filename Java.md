@@ -5,18 +5,25 @@ Long-Term Support (LTS) release focused on performance, language improvements, a
 
 ### Key Features in Java 25
 
-| Feature | JEP | What It Does |
-| --- | --- | --- |
-| **Primitive Types in Patterns & Switch** | - | Enables pattern matching directly with primitive types. Simplifies code and improves type safety with mixed object/primitive logic. |
-| **Compact Object Headers** | JEP 469 | Uses smaller object headers to reduce memory overhead. Improves memory efficiency for large-scale apps. |
-| **Structured Concurrency** | JEP 482 | New API to manage multiple concurrent tasks as a single unit. Makes multithreaded code simpler and safer. |
-| **Vector API Enhancements** | JEP 459 | Better support for vectorized computations. Boosts performance for numerical and AI-related workloads. |
-| **Scoped Values** | JEP 464 | Safer alternative to `ThreadLocal` for sharing immutable data within threads. Improves reliability in concurrent code. |
-| **JFR CPU-Time Profiling on Linux** | - | Adds precise CPU-time profiling to Java Flight Recorder. Helps diagnose and optimize performance bottlenecks. |
+**1. Primitive Types in Patterns & Switch Statements**  
+- Enables pattern matching directly with primitive types
+- Simplifies code and improves type safety when working with both objects and primitives
 
-### Why Java 25 Matters
-- **LTS Release**: Gets security + bug-fix updates for several years. Good target for production.
-- **Memory & Performance**: Compact headers + Vector API = faster, leaner apps.
-- **Concurrency Upgrades**: Structured concurrency + Scoped Values = less error-prone multithreading.
+**2. Compact Object Headers** - JEP 469  
+- Reduces memory overhead by using smaller object headers  
+- Results in better memory efficiency and faster execution in large-scale applications
 
-> **Note**: To check your installed version: `java -version` or `javac -version`
+**3. Structured Concurrency** - JEP 482  
+- Introduces a new API to manage multiple concurrent tasks as a single unit  
+- Makes multithreaded programming simpler and safer
+
+**4. Vector API Enhancements** - JEP 459  
+- Improves support for vectorized computations  
+- Enhances performance in numerical and AI-related workloads
+
+**5. Scoped Values** - JEP 464  
+- Provides a safer alternative to thread-local variables for sharing immutable data within threads  
+- Improves reliability in concurrent programming
+
+**6. JFR CPU-Time Profiling on Linux**  
+- Adds precise CPU-time profiling to Java Flight
